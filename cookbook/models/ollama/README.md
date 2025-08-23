@@ -12,15 +12,14 @@ ollama pull llama3.1:8b
 
 ### 2. Create and activate a virtual environment
 
-```shell
-python3 -m venv ~/.venvs/aienv
-source ~/.venvs/aienv/bin/activate
-```
+
 
 ### 3. Install libraries
 
 ```shell
-pip install -U ollama duckduckgo-search duckdb yfinance agno
+uv venv
+export UV_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+uv pip install -U ollama duckduckgo-search duckdb yfinance agno
 ```
 
 ### 4. Run basic Agent

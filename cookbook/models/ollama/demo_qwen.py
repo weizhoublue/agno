@@ -3,7 +3,7 @@ from agno.models.ollama import Ollama
 from agno.tools.yfinance import YFinanceTools
 
 agent = Agent(
-    model=Ollama(id="qwen3:8b"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     tools=[
         YFinanceTools(
             stock_price=True,
