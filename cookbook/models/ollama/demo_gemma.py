@@ -20,7 +20,6 @@ agent = Agent(
 )
 
 
-
 # 同步运行
 agent.print_response(
     "Write me python code to solve quadratic equations. Explain your reasoning."
