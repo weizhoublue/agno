@@ -23,6 +23,8 @@ knowledge_base = PDFUrlKnowledgeBase(
     vector_db=PgVector(
             table_name="recipes", 
             db_url=db_url,
+            # nomic-embed-text:latest 的 向量维度是 768 
+            # ollama show nomic-embed-text:latest | grep "embedding length"
             embedder=OllamaEmbedder(id="nomic-embed-text:latest", dimensions=768 , host="http://10.20.1.60:11434" ),
         ),
 )
