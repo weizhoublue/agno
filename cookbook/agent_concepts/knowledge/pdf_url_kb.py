@@ -15,11 +15,9 @@ from agno.models.ollama import Ollama
 from agno.embedder.ollama import OllamaEmbedder
 
 db_url = "postgresql+psycopg://ai:ai@10.20.1.60:5532/ai"
-pdf_url = "https://agno-public.s3.amazonaws.com/recipes/ThaiRecipes.pdf"
-
 knowledge_base = PDFUrlKnowledgeBase(
     # 通过在线的 url 获取 pdf 文件
-    urls=[pdf_url],
+    urls=["https://agno-public.s3.amazonaws.com/recipes/ThaiRecipes.pdf"],
     vector_db=PgVector(
             table_name="recipes", 
             db_url=db_url,

@@ -6,6 +6,7 @@ from agno.vectordb.qdrant import Qdrant
 
 COLLECTION_NAME = "pdf-url-reader"
 
+# docker run -p 6333:6333 qdrant/qdrant
 vector_db = Qdrant(collection=COLLECTION_NAME, url="http://localhost:6333")
 
 # Create a knowledge base with the PDFs from the data/pdfs directory
