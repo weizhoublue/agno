@@ -25,6 +25,7 @@ knowledge_base = PDFUrlKnowledgeBase(
             # ollama show nomic-embed-text:latest | grep "embedding length"
             embedder=OllamaEmbedder(id="nomic-embed-text:latest", dimensions=768 , host="http://10.20.1.60:11434" ),
         ),
+    debug_mode=True,
 )
 # 如果之前创建过向量数据库的同名 table ， embedder dimensions 和同其匹配。否则，可以设置 recreate=True 来重新创建
 knowledge_base.load(recreate=True)  # Comment out after first run
@@ -34,6 +35,7 @@ agent = Agent(
     model=Ollama(id="llama3.1:latest",host="http://10.20.1.60:11434"),
     knowledge=knowledge_base,
     search_knowledge=True,
+    debug_mode=True,
 )
 
 agent.print_response("How to make Thai curry?", markdown=True)
