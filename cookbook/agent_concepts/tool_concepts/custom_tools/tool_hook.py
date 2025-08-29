@@ -1,17 +1,19 @@
 """Show how to use a tool execution hook, to run logic before and after a tool is called."""
 
 import json
-from typing import Any, Callable, Dict
+from typing import Dict
 
 from agno.agent import Agent
 from agno.tools.toolkit import Toolkit
 from agno.utils.log import logger
+from agno.models.ollama import Ollama
 
-
+#------ 通过注册 class ，实现提供 多个 tool 给 agent
 class CustomerDBTools(Toolkit):
+
+    # 在 __init__ 方法中使用 self.register() 来注册每个工具方法, 才能被 agent 调用
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.register(self.retrieve_customer_profile)
         self.register(self.delete_customer_profile)
 
@@ -45,29 +47,12 @@ class CustomerDBTools(Toolkit):
         return f"Customer profile for {customer_id}"
 
 
-def validation_hook(
-    function_name: str, function_call: Callable, arguments: Dict[str, Any]
-):
-    if function_name == "delete_customer_profile":
-        cust_id = arguments.get("customer_id")
-        if cust_id == "123":
-            raise ValueError("Cannot delete customer profile for ID 123")
-
-    if function_name == "retrieve_customer_profile":
-        cust_id = arguments.get("customer_id")
-        if cust_id == "123":
-            raise ValueError("Cannot retrieve customer profile for ID 123")
-
-    result = function_call(**arguments)
-
-    logger.info(
-        f"Validation hook: {function_name} with arguments {arguments} returned {result}"
-    )
-
-    return result
-
-
-agent = Agent(tools=[CustomerDBTools()], tool_hooks=[validation_hook])
+agent = Agent(
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
+    tools=[CustomerDBTools()],
+    debug_mode=True,
+    show_tool_calls=True,
+)
 
 # This should work
 agent.print_response("I am customer 456, please retrieve my profile.")

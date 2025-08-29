@@ -6,15 +6,21 @@ when using either reasoning=True or setting a specific reasoning_model.
 """
 
 from agno.agent import Agent
-from agno.models.openai import OpenAIChat
+from agno.models.ollama import Ollama
+
+from agno.debug import enable_debug_mode
+
+# 启用调试模式，就能看到页面爬取过程  
+enable_debug_mode()
 
 print("\n=== Example 1: Using reasoning=True (default COT) ===\n")
 
 # Create agent with reasoning=True (default model COT)
 agent = Agent(
-    model=OpenAIChat(id="gpt-4o"),
+    model=Ollama(id="qwen3:8b", host="http://10.20.1.60:11434"),
     reasoning=True,
     markdown=True,
+    
 )
 
 # Run the agent (non-streaming)
@@ -33,8 +39,8 @@ print("\n\n=== Example 2: Using a custom reasoning_model ===\n")
 
 # Create agent with a specific reasoning_model
 agent_with_reasoning_model = Agent(
-    model=OpenAIChat(id="gpt-4o"),
-    reasoning_model=OpenAIChat(id="gpt-4o"),  # Should default to manual COT
+    model=Ollama(id="qwen3:8b", host="http://10.20.1.60:11434"),
+    reasoning_model=Ollama(id="qwen3:8b", host="http://10.20.1.60:11434"),
     markdown=True,
 )
 
@@ -56,7 +62,7 @@ print("\n\n=== Example 3: Streaming with reasoning=True ===\n")
 
 # Create a fresh agent for streaming
 streaming_agent = Agent(
-    model=OpenAIChat(id="gpt-4o"),
+    model=Ollama(id="qwen3:8b", host="http://10.20.1.60:11434"),
     reasoning=True,
     markdown=True,
 )
@@ -86,8 +92,8 @@ print("\n\n=== Example 4: Streaming with reasoning_model ===\n")
 
 # Create a fresh agent with reasoning_model for streaming
 streaming_agent_with_model = Agent(
-    model=OpenAIChat(id="gpt-4o"),
-    reasoning_model=OpenAIChat(id="gpt-4o"),
+    model=Ollama(id="qwen3:8b", host="http://10.20.1.60:11434"),
+    reasoning_model=Ollama(id="qwen3:8b", host="http://10.20.1.60:11434"),
     markdown=True,
 )
 

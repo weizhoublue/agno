@@ -2,7 +2,7 @@ import asyncio
 import time
 
 from agno.agent import Agent
-from agno.models.openai import OpenAIChat
+from agno.models.ollama import Ollama
 from agno.utils.log import logger
 
 #####################################
@@ -50,10 +50,12 @@ async def atask3(delay: int):
 
 
 async_agent = Agent(
-    model=OpenAIChat(id="gpt-4o-mini"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
+    # 定义 异步调用的 tools， 可以实现 tool 调用的 并发，提高 agent 的整体用户响应
     tools=[atask2, atask1, atask3],
     show_tool_calls=True,
     markdown=True,
+    debug_mode=True,
 )
 
 # Non-streaming response
@@ -107,7 +109,7 @@ def task3(delay: int):
 
 
 sync_agent = Agent(
-    model=OpenAIChat(id="gpt-4o-mini"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     tools=[task2, task1, task3],
     show_tool_calls=True,
     markdown=True,

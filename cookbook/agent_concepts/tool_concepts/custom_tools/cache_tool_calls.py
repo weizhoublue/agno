@@ -6,6 +6,8 @@ from agno.agent import Agent
 from agno.tools import tool
 
 
+# 【可选】通过 @tool 修饰符，可以定义 tool 级别的 工作参数  https://docs.agno.com/tools/tool-decorator#%40tool-parameters-reference
+#    - 当 cache_results=True 时，如果工具调用的入参与之前某一次的缓存场景下完全相同，就会使用那一次的缓存结果
 @tool(show_result=True, stop_after_tool_call=True, cache_results=True)
 def get_top_hackernews_stories(num_stories: int = 5) -> str:
     # Fetch top story IDs

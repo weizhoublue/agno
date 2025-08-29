@@ -6,7 +6,6 @@ import httpx
 from agno.agent import Agent
 from agno.tools import tool
 
-
 class DemoTools:
     @tool(description="Get the top hackernews stories")
     @staticmethod

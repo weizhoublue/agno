@@ -1,7 +1,7 @@
 import random
 
 from agno.agent import Agent
-from agno.models.openai import OpenAIChat
+from agno.models.ollama import Ollama
 from agno.tools import tool
 
 
@@ -16,12 +16,11 @@ def get_weather(city: str) -> str:
 
 
 agent = Agent(
-    model=OpenAIChat(id="gpt-4o-mini"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     markdown=True,
 )
-
 agent.print_response("What can you do?", stream=True)
 
+# tool 可以被动态 按需 添加
 agent.add_tool(get_weather)
-
 agent.print_response("What is the weather in San Francisco?", stream=True)

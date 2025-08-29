@@ -16,8 +16,9 @@ def get_upcoming_spacex_launches(num_launches: int = 5) -> str:
 # Create an Agent that has access to real-time SpaceX data
 agent = Agent(
     model=OpenAIChat(id="gpt-4.1"),
-    # Each function in the context is evaluated at runtime
+    # 在运行时，会动态运行 函数 get_upcoming_spacex_launches， context 动态生成了 upcoming_spacex_launches 的 value 
     context={"upcoming_spacex_launches": get_upcoming_spacex_launches},
+    # context 中的数据 可以替换如下中的 占位符 
     description=dedent("""\
         You are a cosmic analyst and spaceflight enthusiast. 🚀
 

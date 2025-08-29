@@ -13,7 +13,7 @@ from typing import List, Optional
 from agno.agent import Agent
 from agno.tools.decorator import tool
 from pydantic import BaseModel, Field
-
+from agno.models.ollama import Ollama
 
 # Define Pydantic models for our tools
 class UserProfile(BaseModel):
@@ -70,6 +70,7 @@ def create_task(task_data: Task) -> str:
 
 # Create the agent
 agent = Agent(
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     name="task_manager",
     description="An agent that manages users and tasks with proper validation",
     tools=[create_user, create_task],
