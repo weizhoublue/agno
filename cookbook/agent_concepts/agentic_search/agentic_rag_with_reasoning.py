@@ -37,7 +37,7 @@ knowledge_base = UrlKnowledge(
         # - SearchType.hybrid - 混合搜索。 结合向量搜索和关键词搜索的优势，既能找到语义相似的内容，也能精确匹配关键词
         search_type=SearchType.hybrid,
         # 使用 本地部署的 ollama 实施 embedding
-        #embedder=OllamaEmbedder(id="nomic-embed-text:latest", dimensions=768 , host="http://10.20.1.60:11434" ),
+        # embedder=OllamaEmbedder(id="nomic-embed-text:latest", dimensions=768 , host="http://10.20.1.60:11434" ),
         # 使用 Infinity 做 embedding
         embedder=JinaEmbedder(
             id="jinaai/jina-embeddings-v3",

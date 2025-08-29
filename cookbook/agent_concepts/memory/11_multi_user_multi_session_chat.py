@@ -13,16 +13,20 @@ import asyncio
 from agno.agent.agent import Agent
 from agno.memory.v2.db.sqlite import SqliteMemoryDb
 from agno.memory.v2.memory import Memory
-from agno.models.anthropic.claude import Claude
-from agno.models.google.gemini import Gemini
 from agno.storage.sqlite import SqliteStorage
+from agno.models.ollama import Ollama
 
 agent_storage = SqliteStorage(
     table_name="agent_sessions", db_file="tmp/persistent_memory.db"
 )
 memory_db = SqliteMemoryDb(table_name="memory", db_file="tmp/memory.db")
 
-memory = Memory(model=Claude(id="claude-3-5-sonnet-20241022"), db=memory_db)
+memory_model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434")
+
+memory = Memory(
+    model=memory_model, 
+    db=memory_db,
+    )
 
 # Reset the memory for this example
 memory.clear()
@@ -36,11 +40,16 @@ user_1_session_2_id = "user_1_session_2"
 user_2_session_1_id = "user_2_session_1"
 user_3_session_1_id = "user_3_session_1"
 
+agent_model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434")
 chat_agent = Agent(
-    model=Gemini(id="gemini-2.0-flash-exp"),
+    model=agent_model,
     storage=agent_storage,
     memory=memory,
     enable_user_memories=True,
+    #-------------------------
+    # debug
+    debug_mode=True,
+    show_tool_calls=True,
 )
 
 
@@ -49,11 +58,13 @@ async def run_chat_agent():
         "My name is Mark Gonzales and I like anime and video games.",
         user_id=user_1_id,
         session_id=user_1_session_1_id,
+        stream=True,
     )
     await chat_agent.aprint_response(
         "I also enjoy reading manga and playing video games.",
         user_id=user_1_id,
         session_id=user_1_session_1_id,
+        stream=True,
     )
 
     # Chat with user 1 - Session 2
@@ -61,26 +72,29 @@ async def run_chat_agent():
         "I'm going to the movies tonight.",
         user_id=user_1_id,
         session_id=user_1_session_2_id,
+        stream=True,
     )
 
     # Chat with user 2
     await chat_agent.aprint_response(
-        "Hi my name is John Doe.", user_id=user_2_id, session_id=user_2_session_1_id
+        "Hi my name is John Doe.", user_id=user_2_id, session_id=user_2_session_1_id, stream=True
     )
     await chat_agent.aprint_response(
         "I'm planning to hike this weekend.",
         user_id=user_2_id,
         session_id=user_2_session_1_id,
+        stream=True,
     )
 
     # Chat with user 3
     await chat_agent.aprint_response(
-        "Hi my name is Jane Smith.", user_id=user_3_id, session_id=user_3_session_1_id
+        "Hi my name is Jane Smith.", user_id=user_3_id, session_id=user_3_session_1_id, stream=True
     )
     await chat_agent.aprint_response(
         "I'm going to the gym tomorrow.",
         user_id=user_3_id,
         session_id=user_3_session_1_id,
+        stream=True,
     )
 
     # Continue the conversation with user 1
@@ -89,6 +103,7 @@ async def run_chat_agent():
         "What do you suggest I do this weekend?",
         user_id=user_1_id,
         session_id=user_1_session_1_id,
+        stream=True,
     )
 
 

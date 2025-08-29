@@ -4,7 +4,7 @@ Create user memories with an Agent by providing a either text or a list of messa
 
 from agno.memory.v2 import Memory
 from agno.memory.v2.db.sqlite import SqliteMemoryDb
-from agno.models.google import Gemini
+from agno.models.ollama import Ollama
 from agno.models.message import Message
 from rich.pretty import pprint
 
@@ -12,7 +12,10 @@ memory_db = SqliteMemoryDb(table_name="memory", db_file="tmp/memory.db")
 # Reset for this example
 memory_db.clear()
 
-memory = Memory(model=Gemini(id="gemini-2.0-flash-exp"), db=memory_db)
+memory = Memory(
+            model=Ollama(id="llama3.1:latest",host="http://10.20.1.60:11434"),
+            db=memory_db,
+        )
 
 john_doe_id = "john_doe@example.com"
 
