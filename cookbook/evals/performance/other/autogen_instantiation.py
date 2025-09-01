@@ -1,3 +1,4 @@
+# cspell:ignore autogen autogen_ext
 """Run `pip install autogen-agentchat "autogen-ext[openai]"` to install dependencies."""
 
 from typing import Literal

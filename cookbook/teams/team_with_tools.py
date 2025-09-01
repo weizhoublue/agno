@@ -1,10 +1,11 @@
+# uv pip install agno agentql wikipedia ddgs
+
+
 import asyncio
 from uuid import uuid4
 
 from agno.agent.agent import Agent
-from agno.models.anthropic.claude import Claude
-from agno.models.mistral.mistral import MistralChat
-from agno.models.openai.chat import OpenAIChat
+from agno.models.ollama import Ollama
 from agno.team import Team
 from agno.tools.agentql import AgentQLTools
 from agno.tools.duckduckgo import DuckDuckGoTools
@@ -13,21 +14,25 @@ from agno.tools.wikipedia import WikipediaTools
 wikipedia_agent = Agent(
     name="Wikipedia Agent",
     role="Search wikipedia for information",
-    model=MistralChat(id="mistral-large-latest"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     tools=[WikipediaTools()],
     instructions=[
         "Find information about the company in the wikipedia",
     ],
+    show_tool_calls=True,
+    debug_mode=True,
 )
 
 website_agent = Agent(
     name="Website Agent",
     role="Search the website for information",
-    model=OpenAIChat(id="gpt-4o"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     tools=[DuckDuckGoTools()],
     instructions=[
         "Search the website for information",
     ],
+    debug_mode=True,
+    show_tool_calls=True,
 )
 
 # Define custom AgentQL query for specific data extraction (see https://docs.agentql.com/concepts/query-language)
@@ -45,13 +50,13 @@ company_info_team = Team(
     mode="coordinate",
     team_id=team_id,
     user_id=user_id,
-    model=Claude(id="claude-3-7-sonnet-latest"),
-    tools=[AgentQLTools(agentql_query=custom_query)],
+    model=Ollama(id="qwen3:14b",host="http://10.20.1.60:11434"),
+    # AgentQLTools 从网页代码中提取出结构化数据, 需要 key
+    tools=[ AgentQLTools(api_key="axZeX9iO2QbKnU0AbA-ojZls94WfbJB6M60El1Qpn7P5DCB1dJCQIg" , agentql_query=custom_query)],
     members=[
         wikipedia_agent,
         website_agent,
     ],
-    show_tool_calls=True,
     markdown=True,
     instructions=[
         "You are a team that finds information about a company.",
@@ -59,6 +64,8 @@ company_info_team = Team(
         "If you can find the company's website URL, then scrape the homepage and the about page.",
     ],
     show_members_responses=True,
+    debug_mode=True,
+    show_tool_calls=True,
 )
 
 if __name__ == "__main__":

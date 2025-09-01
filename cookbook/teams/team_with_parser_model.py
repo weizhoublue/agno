@@ -72,6 +72,7 @@ weather_expert = Agent(
 national_park_expert = Team(
     model=OpenAIChat(id="gpt-4.1"),
     members=[itinerary_planner, weather_expert],
+    # 不会涉及 LLM 调用。 它定义了 最终的返回结果 的 数据格式
     response_model=NationalParkAdventure,
     parser_model=OpenAIChat(id="gpt-4o"),
 )

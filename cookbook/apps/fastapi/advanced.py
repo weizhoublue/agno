@@ -4,7 +4,7 @@ from agno.agent import Agent
 from agno.app.fastapi import FastAPIApp
 from agno.memory.v2 import Memory
 from agno.memory.v2.db.sqlite import SqliteMemoryDb
-from agno.models.openai import OpenAIChat
+from agno.models.ollama import Ollama
 from agno.storage.sqlite import SqliteStorage
 from agno.team.team import Team
 from agno.tools.duckduckgo import DuckDuckGoTools
@@ -23,7 +23,7 @@ simple_agent = Agent(
     name="Simple Agent",
     role="Answer basic questions",
     agent_id="simple-agent",
-    model=OpenAIChat(id="gpt-4o-mini"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     storage=SqliteStorage(
         table_name="simple_agent", db_file=agent_storage_file, auto_upgrade_schema=True
     ),
@@ -39,7 +39,7 @@ web_agent = Agent(
     name="Web Agent",
     role="Search the web for information",
     agent_id="web-agent",
-    model=OpenAIChat(id="gpt-4o"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     tools=[DuckDuckGoTools()],
     instructions=[
         "Break down the users request into 2-3 different searches.",
@@ -60,7 +60,7 @@ finance_agent = Agent(
     name="Finance Agent",
     role="Get financial data",
     agent_id="finance-agent",
-    model=OpenAIChat(id="gpt-4o"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     tools=[
         YFinanceTools(
             stock_price=True,
@@ -84,7 +84,7 @@ finance_agent = Agent(
 research_agent = Agent(
     name="Research Agent",
     role="Research agent",
-    model=OpenAIChat(id="gpt-4o"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     instructions=["You are a research agent"],
     tools=[DuckDuckGoTools(), ExaTools()],
     agent_id="research_agent",
@@ -101,7 +101,7 @@ research_team = Team(
     name="Research Team",
     description="A team of agents that research the web",
     members=[research_agent, simple_agent],
-    model=OpenAIChat(id="gpt-4o"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     mode="coordinate",
     team_id="research-team",
     success_criteria=dedent("""\

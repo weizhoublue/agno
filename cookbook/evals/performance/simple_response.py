@@ -2,12 +2,12 @@
 
 from agno.agent import Agent
 from agno.eval.performance import PerformanceEval
-from agno.models.openai import OpenAIChat
+from agno.models.ollama import Ollama
 
 
 def run_agent():
     agent = Agent(
-        model=OpenAIChat(id="gpt-4o-mini"),
+        model=Ollama(id="qwen3:14b",host="http://10.20.1.60:11434"),
         system_message="Be concise, reply with one sentence.",
     )
     response = agent.run("What is the capital of France?")

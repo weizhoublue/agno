@@ -14,13 +14,14 @@ The team leader coordinates the agents by:
 - Providing clear instructions for each agent
 - Collecting and summarizing the results from each agent
 
+uv pip install ddgs  duckduckgo-search newspaper4k lxml_html_clean agno
 """
 
 import asyncio
 from typing import List
 
 from agno.agent import Agent
-from agno.models.openai import OpenAIChat
+from agno.models.ollama import Ollama
 from agno.run.team import TeamRunResponse  # type: ignore
 from agno.team import Team
 from agno.tools.duckduckgo import DuckDuckGoTools
@@ -39,30 +40,34 @@ class Article(BaseModel):
 
 hn_researcher = Agent(
     name="HackerNews Researcher",
-    model=OpenAIChat("gpt-4o"),
+    model=Ollama(id="mistral-small3.2:24b",host="http://10.20.1.60:11434"),
     role="Gets top stories from hackernews.",
     tools=[HackerNewsTools()],
+    debug_mode=True,
 )
 
 web_searcher = Agent(
     name="Web Searcher",
-    model=OpenAIChat("gpt-4o"),
+    model=Ollama(id="mistral-small3.2:24b",host="http://10.20.1.60:11434"),
     role="Searches the web for information on a topic",
     tools=[DuckDuckGoTools()],
     add_datetime_to_instructions=True,
+    debug_mode=True,
 )
 
 article_reader = Agent(
     name="Article Reader",
+    model=Ollama(id="mistral-small3.2:24b",host="http://10.20.1.60:11434"),
     role="Reads articles from URLs.",
     tools=[Newspaper4kTools()],
+    debug_mode=True,
 )
 
 
 hn_team = Team(
     name="HackerNews Team",
     mode="coordinate",
-    model=OpenAIChat("o3"),
+    model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
     members=[hn_researcher, web_searcher, article_reader],
     instructions=[
         "First, search hackernews for what the user is asking about.",
@@ -71,12 +76,14 @@ hn_team = Team(
         "Then, ask the web searcher to search for each story to get more information.",
         "Finally, provide a thoughtful and engaging summary.",
     ],
-    response_model=Article,
+    # 当设置了该值（最终响应的结构化输出），遇到一些 team llm 模型时 ，团队 LLM 可能就不会调用成员 agent 了
+    #response_model=Article,
     add_member_tools_to_system_message=False,
     show_tool_calls=True,
     markdown=True,
     show_members_responses=True,
     enable_agentic_context=True,
+    debug_mode=True,
 )
 
 if __name__ == "__main__":

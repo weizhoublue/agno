@@ -2,14 +2,14 @@ from typing import Optional
 
 from agno.agent import Agent
 from agno.eval.accuracy import AccuracyEval, AccuracyResult
-from agno.models.openai import OpenAIChat
+from agno.models.ollama import Ollama
 from agno.tools.calculator import CalculatorTools
 
 evaluation = AccuracyEval(
     name="Calculator Evaluation",
-    model=OpenAIChat(id="o4-mini"),
+    model=Ollama(id="qwen3:14b",host="http://10.20.1.60:11434"),
     agent=Agent(
-        model=OpenAIChat(id="gpt-4o"),
+        model=Ollama(id="qwen3:8b",host="http://10.20.1.60:11434"),
         tools=[CalculatorTools(enable_all=True)],
     ),
     input="What is 10*5 then to the power of 2? do it step by step",
