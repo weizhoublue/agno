@@ -19,44 +19,37 @@ import os
 from textwrap import dedent
 
 from agno.agent import Agent
-from agno.models.openai import OpenAIChat
+from agno.models.ollama import Ollama
 from agno.tools.mcp import MCPTools
 from mcp import StdioServerParameters
 
 
 async def run_agent():
-    token = os.getenv("NOTION_API_KEY")
-    if not token:
-        raise ValueError(
-            "Missing Notion API key: provide --NOTION_API_KEY or set NOTION_API_KEY environment variable"
-        )
+
 
     command = "npx"
-    args = ["-y", "@notionhq/notion-mcp-server"]
+    args = ["-y", "@larksuiteoapi/lark-mcp", "mcp", "-a", "cli_a83032681b53901c", "-s", "OKkKQMPJoQeYI7LpimPVtcU6Kensyj4l", "--oauth"]
     env = {
-        "OPENAPI_MCP_HEADERS": json.dumps(
-            {"Authorization": f"Bearer {token}", "Notion-Version": "2022-06-28"}
-        )
+        "LARK_DOMAIN": "https://open.feishu.cn"
     }
     server_params = StdioServerParameters(command=command, args=args, env=env)
 
     async with MCPTools(server_params=server_params) as mcp_tools:
         agent = Agent(
-            name="NotionDocsAgent",
-            model=OpenAIChat(id="gpt-4o"),
+            name="chat",
+            model=Ollama(id="qwen3:14b", host="http://10.20.1.60:11434"),
             tools=[mcp_tools],
-            description="Agent to query and modify Notion docs via MCP",
+            description="你是一个聊天客服",
             instructions=dedent("""\
-                You have access to Notion documents through MCP tools.
-                - Use tools to read, search, or update pages.
-                - Confirm with the user before making modifications.
+                你能够基于 MCP tools 实现消息发送、获取、更新等操作。
             """),
             markdown=True,
             show_tool_calls=True,
+            debug_mode=True,
         )
 
         await agent.acli_app(
-            message="You are a helpful assistant that can access Notion workspaces and pages.",
+            message="你好，我是客服小明，有什么问题可以找我。",
             stream=True,
             markdown=True,
             exit_on=["exit", "quit"],
